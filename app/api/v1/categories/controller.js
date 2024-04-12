@@ -14,7 +14,14 @@ const index = async (req, res, next) => {
 const find = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await Categories.findById({ _id: id });
+    const result = await Categories.findOne({ _id: id });
+
+    if (!result) {
+      return res.status(404).json({
+        message: "Id Categories Tidak Ditemukan",
+      });
+    }
+
     res.status(200).json({
       data: result,
     });
