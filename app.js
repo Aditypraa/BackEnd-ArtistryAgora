@@ -5,10 +5,11 @@ const logger = require("morgan");
 
 // Inisialisasi Variabel
 const app = express();
-const v1 = "/api/v1/cms";
 // End Variabel
 
 // Inisialisasi Router
+const v1 = "/api/v1/cms";
+
 const authRouter = require("./app/api/v1/auth/router");
 const categoriesRouter = require("./app/api/v1/categories/router");
 const eventsRouter = require("./app/api/v1/events/router");
