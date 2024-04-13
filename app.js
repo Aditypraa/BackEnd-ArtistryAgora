@@ -7,6 +7,11 @@ const logger = require("morgan");
 const app = express();
 // End Variabel
 
+// Middleware
+const notFoundMiddleware = require("./app/middleware/not-found");
+const handleErrorMiddleware = require("./app/middleware/error-handler");
+// End Middleware
+
 // Inisialisasi Router
 const v1 = "/api/v1/cms";
 
@@ -46,5 +51,10 @@ app.use(v1, paymentsRouter);
 app.use(v1, talentsRouter);
 app.use(v1, ticketsRouter);
 // End Use Router
+
+// Use Middleware
+app.use(notFoundMiddleware);
+app.use(handleErrorMiddleware);
+// End Middleware
 
 module.exports = app;
