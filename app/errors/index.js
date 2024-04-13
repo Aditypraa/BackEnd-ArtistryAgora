@@ -1,6 +1,6 @@
-const BadRequestError = require("./bad-request");
-const CustomApiError = require("./custom-api-error");
-const NotFoundError = require("./not-found");
+const BadRequestError = require("./badRequestErrors");
+const CustomApiError = require("./customApiErrors");
+const NotFoundError = require("./notFoundErrors");
 
 module.exports = {
   CustomApiError,

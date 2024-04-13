@@ -8,22 +8,22 @@ const app = express();
 // End Variabel
 
 // Middleware
-const notFoundMiddleware = require("./app/middleware/not-found");
+const notFoundMiddleware = require("./app/middlewares/");
 const handleErrorMiddleware = require("./app/middleware/error-handler");
 // End Middleware
 
 // Inisialisasi Router
 const v1 = "/api/v1/cms";
 
-const authRouter = require("./app/api/v1/auth/router");
-const categoriesRouter = require("./app/api/v1/categories/router");
-const eventsRouter = require("./app/api/v1/events/router");
-const imagesRouter = require("./app/api/v1/images/router");
-const ordersRouter = require("./app/api/v1/orders/router");
-const participantsRouter = require("./app/api/v1/participants/router");
-const paymentsRouter = require("./app/api/v1/payments/router");
-const talentsRouter = require("./app/api/v1/talents/router");
-const ticketsRouter = require("./app/api/v1/tickets/router");
+const authRouter = require("./app/api/v1/auth/authRouter");
+const categoriesRouter = require("./app/api/v1/categories/categoriesRouter");
+const eventsRouter = require("./app/api/v1/events/eventsRouter");
+const imagesRouter = require("./app/api/v1/images/imagesRouter");
+const ordersRouter = require("./app/api/v1/orders/ordersRouter");
+const participantsRouter = require("./app/api/v1/participants/participantsRouter");
+const paymentsRouter = require("./app/api/v1/payments/paymentsRouter");
+const talentsRouter = require("./app/api/v1/talents/talentsRouter");
+const ticketsRouter = require("./app/api/v1/tickets/ticketsRouter");
 // End Router
 
 // Use package
@@ -41,15 +41,15 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use(v1, authRouter);
+// app.use(v1, authRouter);
 app.use(v1, categoriesRouter);
-app.use(v1, eventsRouter);
-app.use(v1, imagesRouter);
-app.use(v1, ordersRouter);
-app.use(v1, participantsRouter);
-app.use(v1, paymentsRouter);
-app.use(v1, talentsRouter);
-app.use(v1, ticketsRouter);
+// app.use(v1, eventsRouter);
+// app.use(v1, imagesRouter);
+// app.use(v1, ordersRouter);
+// app.use(v1, participantsRouter);
+// app.use(v1, paymentsRouter);
+// app.use(v1, talentsRouter);
+// app.use(v1, ticketsRouter);
 // End Use Router
 
 // Use Middleware

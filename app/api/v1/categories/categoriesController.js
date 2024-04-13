@@ -1,8 +1,8 @@
-const Categories = require("./model");
+const CategoriesModel = require("./categoriesModel");
 
 const index = async (req, res, next) => {
   try {
-    const result = await Categories.find().select("_id name");
+    const result = await CategoriesModel.find().select("_id name");
     res.status(200).json({
       data: result,
     });
@@ -14,7 +14,7 @@ const index = async (req, res, next) => {
 const find = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await Categories.findOne({ _id: id });
+    const result = await CategoriesModel.findOne({ _id: id });
 
     if (!result) {
       return res.status(404).json({
@@ -33,7 +33,7 @@ const find = async (req, res, next) => {
 const create = async (req, res, next) => {
   try {
     const { name } = req.body;
-    const result = await Categories.create({ name });
+    const result = await CategoriesModel.create({ name });
     res.status(201).json({
       data: result,
     });
@@ -46,7 +46,7 @@ const update = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
-    const result = await Categories.findOneAndUpdate(
+    const result = await CategoriesModel.findOneAndUpdate(
       { _id: id },
       { name },
       { new: true, runValidators: true }
@@ -69,7 +69,7 @@ const update = async (req, res, next) => {
 const destroy = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await Categories.findByIdAndDelete(id);
+    const result = await CategoriesModel.findByIdAndDelete(id);
     res.status(200).json({
       data: result,
     });
