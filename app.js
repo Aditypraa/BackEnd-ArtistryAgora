@@ -8,8 +8,8 @@ const app = express();
 // End Variabel
 
 // Middleware
-// const notFoundMiddleware = require("./app/middlewares/");
-// const handleErrorMiddleware = require("./app/middleware/error-handler");
+const notFoundMiddlewares = require("./app/middlewares/notFoundMiddlewares");
+const handleErrorMiddlewares = require("./app/middlewares/handlerErrorMiddlewares");
 // End Middleware
 
 // Inisialisasi Router
@@ -53,8 +53,8 @@ app.use(v1, categoriesRouter);
 // End Use Router
 
 // Use Middleware
-// app.use(notFoundMiddleware);
-// app.use(handleErrorMiddleware);
+app.use(notFoundMiddlewares);
+app.use(handleErrorMiddlewares);
 // End Middleware
 
 module.exports = app;
