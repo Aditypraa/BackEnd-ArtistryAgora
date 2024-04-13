@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { urlDb } = require("../config/mongo.config");
+const { urlDb } = require("../config/mongoConfig");
 
 mongoose.connect(urlDb);
 

@@ -9,7 +9,7 @@ const debug = require("debug")("backend-artistryagora:server");
 const http = require("http");
 
 // import package db
-const db = require("../app/db");
+const db = require("../app/db/indexDb");
 
 /**
  * Get port from environment and store in Express.
