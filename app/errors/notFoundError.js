@@ -1,12 +1,12 @@
-const { StatusCode } = require("http-status-codes");
-const CustomApiError = require("./customApiErrors");
+const { StatusCodes } = require("http-status-codes");
+const CustomApiError = require("./customApiError");
 
 class NotFoundError extends CustomApiError {
   constructor(message) {
     super(message);
 
     // Memberikan status code not found
-    this.statusCode = StatusCode.Not_Found;
+    this.statusCode = StatusCodes.NOT_FOUND;
   }
 }
 
