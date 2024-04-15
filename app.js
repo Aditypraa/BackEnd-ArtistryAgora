@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 // app.use(v1, authRouter);
 app.use(v1, categoriesRouter);
 // app.use(v1, eventsRouter);
-// app.use(v1, imagesRouter);
+app.use(v1, imagesRouter);
 // app.use(v1, ordersRouter);
 // app.use(v1, participantsRouter);
 // app.use(v1, paymentsRouter);

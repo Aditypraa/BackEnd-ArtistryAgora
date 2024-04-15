@@ -1,9 +1,7 @@
 const router = require("express").Router();
+const uploadMiddleware = require("../../../middlewares/multerMiddlewares");
+const { create } = require("./imagesController");
 
-router.get("/images", (req, res) => {
-  res.status(200).json({
-    message: "Halaman Images",
-  });
-});
+router.post("/images", uploadMiddleware.single("avatar"), create);
 
 module.exports = router;
