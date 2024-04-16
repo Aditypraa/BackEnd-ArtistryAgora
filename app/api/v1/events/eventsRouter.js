@@ -1,9 +1,11 @@
+const { index, find, create, update, destroy } = require("./eventsController");
+
 const router = require("express").Router();
 
-router.get("/events", (req, res) => {
-  res.status(200).json({
-    message: "Halaman Events",
-  });
-});
+router.get("/events", index);
+router.get("/events/:id", find);
+router.post("/events", create);
+router.put("/events/:id", update);
+router.delete("/events/:id", destroy);
 
 module.exports = router;
