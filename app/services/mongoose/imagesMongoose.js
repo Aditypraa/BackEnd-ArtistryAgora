@@ -1,4 +1,5 @@
 const ImagesModel = require("../../api/v1/images/imagesModel");
+const { NotFoundError } = require("../../errors");
 
 // Generetae url setelah submit baru simpan image
 const generateUrlImage = async (req) => {
@@ -17,4 +18,13 @@ const createImages = async (req) => {
   return result;
 };
 
-module.exports = { generateUrlImage, createImages };
+const checkingImage = async (id) => {
+  const result = await ImagesModel.findOne({ _id: id });
+  console.log(result);
+
+  if (!result) throw new NotFoundError(`Tidak ada Gambar dengan ID : ${id}`);
+
+  return result;
+};
+
+module.exports = { generateUrlImage, createImages, checkingImage };

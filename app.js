@@ -48,7 +48,7 @@ app.use(v1, imagesRouter);
 // app.use(v1, ordersRouter);
 // app.use(v1, participantsRouter);
 // app.use(v1, paymentsRouter);
-// app.use(v1, talentsRouter);
+app.use(v1, talentsRouter);
 // app.use(v1, ticketsRouter);
 // End Use Router
 

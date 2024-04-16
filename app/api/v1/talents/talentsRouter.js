@@ -1,9 +1,11 @@
 const router = require("express").Router();
 
-router.get("/talents", (req, res) => {
-  res.status(200).json({
-    message: "Halaman Talents",
-  });
-});
+const { index, find, update, create, destroy } = require("./talentsController");
+
+router.get("/talents", index);
+router.get("/talents/:id", find);
+router.post("/talents", create);
+router.put("/talents/:id", update);
+router.delete("/talents/:id", destroy);
 
 module.exports = router;
