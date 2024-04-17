@@ -8,10 +8,42 @@ const {
   destroy,
 } = require("./categoriesController");
 
-router.get("/categories", index);
-router.get("/categories/:id", find);
-router.post("/categories", create);
-router.put("/categories/:id", update);
-router.delete("/categories/:id", destroy);
+// Middleware Auth
+const {
+  authenticatedUser,
+  authorizeRoles,
+} = require("../../../middlewares/authMiddlewares");
+
+// Router
+router.get(
+  "/categories",
+  authenticatedUser,
+  authorizeRoles("organizer"),
+  index
+);
+router.get(
+  "/categories/:id",
+  authenticatedUser,
+  authorizeRoles("organizer"),
+  find
+);
+router.post(
+  "/categories",
+  authenticatedUser,
+  authorizeRoles("organizer"),
+  create
+);
+router.put(
+  "/categories/:id",
+  authenticatedUser,
+  authorizeRoles("organizer"),
+  update
+);
+router.delete(
+  "/categories/:id",
+  authenticatedUser,
+  authorizeRoles("organizer"),
+  destroy
+);
 
 module.exports = router;
