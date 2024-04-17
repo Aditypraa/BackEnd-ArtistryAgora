@@ -1,0 +1,29 @@
+const UsersModel = require("../../api/v1/users/usersModel");
+const OrganizersModel = require("../../api/v1/organizers/organizersModel");
+
+// Handeling Error
+const { BadRequestError } = require("../../errors");
+
+const createOrganizer = async (req) => {
+  const { organizer, role, email, password, confirmPassword, name } = req.body;
+
+  if (password !== confirmPassword) {
+    throw new BadRequestError("Password dan confirmPassword tidak sama");
+  }
+
+  const result = await OrganizersModel.create({ organizer });
+
+  const users = await UsersModel.create({
+    email,
+    name,
+    password,
+    organizer: result._id,
+    role,
+  });
+
+  delete users._doc.password;
+
+  return users;
+};
+
+module.exports = { createOrganizer };

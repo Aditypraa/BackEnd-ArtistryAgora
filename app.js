@@ -19,6 +19,10 @@ const categoriesRouter = require("./app/api/v1/categories/categoriesRouter");
 const eventsRouter = require("./app/api/v1/events/eventsRouter");
 const imagesRouter = require("./app/api/v1/images/imagesRouter");
 const talentsRouter = require("./app/api/v1/talents/talentsRouter");
+
+// CMS
+const organizersRouter = require("./app/api/v1/organizers/organizersRouter");
+const authRouter = require("./app/api/v1/auth/authRouter");
 // End Router
 
 // Use package
@@ -40,6 +44,11 @@ app.use(v1, categoriesRouter);
 app.use(v1, eventsRouter);
 app.use(v1, imagesRouter);
 app.use(v1, talentsRouter);
+
+// CMS
+app.use(v1, organizersRouter);
+app.use(v1, authRouter);
+
 // End Use Router
 
 // Use Middleware
