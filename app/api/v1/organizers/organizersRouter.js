@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
 const {
+  getCMSUsers,
   createCMSOrganizer,
   createCMSUsers,
 } = require("./organizersController");
@@ -10,6 +11,8 @@ const {
   authenticatedUser,
   authorizeRoles,
 } = require("../../../middlewares/authMiddlewares");
+
+router.get("/users", authenticatedUser, authorizeRoles("owner"), getCMSUsers);
 
 router.post(
   "/organizers",

@@ -2,7 +2,20 @@ const { StatusCodes } = require("http-status-codes");
 const {
   createOrganizer,
   createUsers,
+  getAllUsers,
 } = require("../../../services/mongoose/usersMongoose");
+
+const getCMSUsers = async (req, res, next) => {
+  try {
+    const result = await getAllUsers(req);
+
+    res.status(StatusCodes.OK).json({
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 const createCMSOrganizer = async (req, res, next) => {
   try {
@@ -16,6 +29,7 @@ const createCMSOrganizer = async (req, res, next) => {
   }
 };
 
+// Create Users Ini adalah admin
 const createCMSUsers = async (req, res, next) => {
   try {
     const result = await createUsers(req);
@@ -31,4 +45,5 @@ const createCMSUsers = async (req, res, next) => {
 module.exports = {
   createCMSOrganizer,
   createCMSUsers,
+  getCMSUsers,
 };
