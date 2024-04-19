@@ -5,7 +5,7 @@ const { checkingImage } = require("./imagesMongoose");
 const getAllTalents = async (req) => {
   const { keyword } = req.query;
 
-  let condition = {};
+  let condition = { organizer: req.user.organizer };
 
   if (keyword) {
     condition = { ...condition, name: { $regex: keyword, $options: "i" } };
@@ -28,12 +28,20 @@ const createTalent = async (req) => {
   await checkingImage(image);
 
   // Mencari Talents dengan field Name
-  const check = await TalentModel.findOne({ name });
+  const check = await TalentModel.findOne({
+    name,
+    organizer: req.user.organizer,
+  });
 
   // apa bila check true / data talents sudah ada maka kita tampilkan error bad request dengan message pembicara sudah terdaftar
   if (check) throw new BadRequestError("pembicara sudah terdaftar");
 
-  const result = await TalentModel.create({ name, image, role });
+  const result = await TalentModel.create({
+    name,
+    image,
+    role,
+    organizer: req.user.organizer,
+  });
 
   return result;
 };
@@ -41,7 +49,10 @@ const createTalent = async (req) => {
 const getOneTalent = async (req) => {
   const { id } = req.params;
 
-  const result = await TalentModel.findOne({ _id: id })
+  const result = await TalentModel.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  })
     .populate({
       path: "image",
       select: "_id name",
@@ -64,6 +75,7 @@ const updateTalents = async (req) => {
   const check = await TalentModel.findOne({
     name,
     _id: { $ne: id },
+    organizer: req.user.organizer,
   });
 
   // apa bila check true / data talents sudah ada maka kita tampilkan error bad request dengan message pembicara sudah terdaftar
@@ -71,7 +83,7 @@ const updateTalents = async (req) => {
 
   const result = await TalentModel.findOneAndUpdate(
     { _id: id },
-    { name, image, role },
+    { name, image, role, organizer: req.user.organizer },
     { new: true, runValidators: true }
   );
 
@@ -84,7 +96,10 @@ const updateTalents = async (req) => {
 const deleteTalents = async (req) => {
   const { id } = req.params;
 
-  const result = await TalentModel.findOneAndDelete({ _id: id });
+  const result = await TalentModel.findOneAndDelete({
+    _id: id,
+    organizer: req.user.organizer,
+  });
 
   if (!result) throw new NotFoundError(`Tidak ada Pembicara dengan ID : ${id}`);
 
