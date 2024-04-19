@@ -7,11 +7,6 @@ const logger = require("morgan");
 const app = express();
 // End Variabel
 
-// Middleware
-const notFoundMiddlewares = require("./app/middlewares/notFoundMiddlewares");
-const handleErrorMiddlewares = require("./app/middlewares/handlerErrorMiddlewares");
-// End Middleware
-
 // Inisialisasi Router
 const v1 = "/api/v1/cms";
 
@@ -23,7 +18,13 @@ const talentsRouter = require("./app/api/v1/talents/talentsRouter");
 // CMS
 const organizersRouter = require("./app/api/v1/organizers/organizersRouter");
 const authRouter = require("./app/api/v1/auth/authRouter");
-// End Router
+// End CMS
+// End Inisialisasi Router
+
+// Middleware
+const notFoundMiddlewares = require("./app/middlewares/notFoundMiddlewares");
+const handleErrorMiddlewares = require("./app/middlewares/handlerErrorMiddlewares");
+// End Middleware
 
 // Use package
 app.use(logger("dev"));
@@ -49,11 +50,11 @@ app.use(v1, talentsRouter);
 app.use(v1, organizersRouter);
 app.use(v1, authRouter);
 
-// End Use Router
-
 // Use Middleware
 app.use(notFoundMiddlewares);
 app.use(handleErrorMiddlewares);
 // End Middleware
+
+// End Use Router
 
 module.exports = app;
