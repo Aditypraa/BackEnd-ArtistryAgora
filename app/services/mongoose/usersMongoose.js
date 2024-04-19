@@ -26,6 +26,7 @@ const createOrganizer = async (req) => {
   return users;
 };
 
+// Create Users Ini adalah admin
 const createUsers = async (req) => {
   const { name, password, role, confirmPassword, email } = req.body;
 
@@ -44,4 +45,10 @@ const createUsers = async (req) => {
   return result;
 };
 
-module.exports = { createOrganizer, createUsers };
+const getAllUsers = async (req) => {
+  const result = await UsersModel.find();
+
+  return result;
+};
+
+module.exports = { createOrganizer, createUsers, getAllUsers };
