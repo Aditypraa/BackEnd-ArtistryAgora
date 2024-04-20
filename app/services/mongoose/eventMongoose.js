@@ -7,7 +7,7 @@ const { checkingCategories } = require("./categoriesMongoose");
 const { BadRequestError, NotFoundError } = require("../../errors");
 
 const getAllEvents = async (req) => {
-  const { keyword, category, talent } = req.query;
+  const { keyword, category, talent, status } = req.query;
   let condition = { organizer: req.user.organizer };
 
   if (keyword) {
@@ -23,6 +23,10 @@ const getAllEvents = async (req) => {
 
   if (talent) {
     condition = { ...condition, talent: talent };
+  }
+
+  if (["Draft", "Published"].includes(status)) {
+    condition = { ...condition, statusEvent: status };
   }
 
   const result = await EventsModel.find(condition)
@@ -48,7 +52,7 @@ const createEvents = async (req) => {
     title,
     date,
     about,
-    tagLine,
+    tagline,
     venueName,
     keyPoint,
     statusEvent,
@@ -73,7 +77,7 @@ const createEvents = async (req) => {
     title,
     date,
     about,
-    tagLine,
+    tagline,
     venueName,
     keyPoint,
     statusEvent,
@@ -119,7 +123,7 @@ const updateEvents = async (req) => {
     title,
     date,
     about,
-    tagLine,
+    tagline,
     venueName,
     keyPoint,
     statusEvent,
@@ -157,7 +161,7 @@ const updateEvents = async (req) => {
       title,
       date,
       about,
-      tagLine,
+      tagline,
       venueName,
       keyPoint,
       statusEvent,
@@ -189,10 +193,34 @@ const deleteEvents = async (req) => {
   return result;
 };
 
+const changeStatusEvents = async (req) => {
+  const { id } = req.params;
+  const { statusEvent } = req.body;
+
+  if (!["Draft", "Published"].includes(statusEvent))
+    throw new BadRequestError("Status Event harus Draft atau Published");
+
+  // Cari event berdasarkan field id
+  const checkEvent = await EventsModel.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  });
+
+  // Jika id result false/ null  maka akan menampilkan error "Tidak ada acara dengan id" yang dikirim oleh client
+  if (!checkEvent) throw new Error(`Tidak ada acara dengan id : ${id}`);
+
+  checkEvent.statusEvent = statusEvent;
+
+  await checkEvent.save();
+
+  return checkEvent;
+};
+
 module.exports = {
   getAllEvents,
   createEvents,
   getOneEvents,
   updateEvents,
   deleteEvents,
+  changeStatusEvents,
 };

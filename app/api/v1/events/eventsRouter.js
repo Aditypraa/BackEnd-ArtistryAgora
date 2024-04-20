@@ -1,5 +1,12 @@
 const router = require("express").Router();
-const { index, find, create, update, destroy } = require("./eventsController");
+const {
+  index,
+  find,
+  create,
+  update,
+  destroy,
+  changeStatus,
+} = require("./eventsController");
 
 // Middleware Auth
 const {
@@ -21,6 +28,14 @@ router.delete(
   authenticatedUser,
   authorizeRoles("organizer"),
   destroy
+);
+
+// change Status Events
+router.put(
+  "/events/:id/status",
+  authenticatedUser,
+  authorizeRoles("organizer"),
+  changeStatus
 );
 
 module.exports = router;
