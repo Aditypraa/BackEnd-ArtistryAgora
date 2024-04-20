@@ -14,6 +14,7 @@ const categoriesRouter = require("./app/api/v1/categories/categoriesRouter");
 const eventsRouter = require("./app/api/v1/events/eventsRouter");
 const imagesRouter = require("./app/api/v1/images/imagesRouter");
 const talentsRouter = require("./app/api/v1/talents/talentsRouter");
+const orderRouter = require("./app/api/v1/orders/ordersRouter");
 
 // CMS
 const organizersRouter = require("./app/api/v1/organizers/organizersRouter");
@@ -45,6 +46,7 @@ app.use(v1, categoriesRouter);
 app.use(v1, eventsRouter);
 app.use(v1, imagesRouter);
 app.use(v1, talentsRouter);
+app.use(v1, orderRouter);
 
 // CMS
 app.use(v1, organizersRouter);
