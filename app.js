@@ -8,7 +8,7 @@ const app = express();
 // End Variabel
 
 // Inisialisasi Router
-const v1 = "/api/v1/cms";
+const v1 = "/api/v1";
 
 const categoriesRouter = require("./app/api/v1/categories/categoriesRouter");
 const eventsRouter = require("./app/api/v1/events/eventsRouter");
@@ -19,6 +19,7 @@ const orderRouter = require("./app/api/v1/orders/ordersRouter");
 // CMS
 const organizersRouter = require("./app/api/v1/organizers/organizersRouter");
 const authRouter = require("./app/api/v1/auth/authRouter");
+const participantsRouter = require("./app/api/v1/participants/participantsRouter");
 // End CMS
 // End Inisialisasi Router
 
@@ -42,21 +43,22 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use(v1, categoriesRouter);
-app.use(v1, eventsRouter);
-app.use(v1, imagesRouter);
-app.use(v1, talentsRouter);
-app.use(v1, orderRouter);
-
 // CMS
-app.use(v1, organizersRouter);
-app.use(v1, authRouter);
+app.use(`${v1}/cms`, categoriesRouter);
+app.use(`${v1}/cms`, eventsRouter);
+app.use(`${v1}/cms`, imagesRouter);
+app.use(`${v1}/cms`, talentsRouter);
+app.use(`${v1}/cms`, orderRouter);
+app.use(`${v1}/cms`, organizersRouter);
+app.use(`${v1}/cms`, authRouter);
+// end CMS
+
+app.use(`${v1}`, participantsRouter);
 
 // Use Middleware
 app.use(notFoundMiddlewares);
 app.use(handleErrorMiddlewares);
 // End Middleware
-
 // End Use Router
 
 module.exports = app;
