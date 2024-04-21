@@ -63,7 +63,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     orderItems: [orderDetailSchema],
-    participants: {
+    participant: {
       type: mongoose.Types.ObjectId,
       ref: "Participant",
       required: true,
