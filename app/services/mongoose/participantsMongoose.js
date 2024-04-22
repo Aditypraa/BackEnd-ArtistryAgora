@@ -2,6 +2,7 @@
 const ParticipantModel = require("../../api/v1/participants/participantsModel");
 const EventsModel = require("../../api/v1/events/eventsModel");
 const OrdersModel = require("../../api/v1/orders/ordersModel");
+const PaymentsModel = require("../../api/v1/payments/paymentsModel");
 // End Model
 
 const {
@@ -130,6 +131,70 @@ const getAllOrders = async (req) => {
   return result;
 };
 
+const checkoutOrder = async (req) => {
+  const { event, personalDetail, payment, tickets } = req.body;
+
+  const checkingEvent = await EventsModel.findOne({ _id: event });
+  if (!checkingEvent) {
+    throw new NotFoundError("Tidak ada acara dengan id : " + event);
+  }
+
+  const checkingPayment = await PaymentsModel.findOne({ _id: payment });
+
+  if (!checkingPayment) {
+    throw new NotFoundError(
+      "Tidak ada metode pembayaran dengan id :" + payment
+    );
+  }
+
+  let totalPay = 0,
+    totalOrderTicket = 0;
+  await tickets.forEach((tic) => {
+    checkingEvent.tickets.forEach((ticket) => {
+      if (tic.ticketCategories.type === ticket.type) {
+        if (tic.sumTicket > ticket.stock) {
+          throw new NotFoundError("Stock event tidak mencukupi");
+        } else {
+          ticket.stock = ticket.stock -= tic.sumTicket;
+
+          totalOrderTicket += tic.sumTicket;
+          totalPay += tic.ticketCategories.price * tic.sumTicket;
+        }
+      }
+    });
+  });
+
+  await checkingEvent.save();
+
+  const historyEvent = {
+    title: checkingEvent.title,
+    date: checkingEvent.date,
+    about: checkingEvent.about,
+    tagline: checkingEvent.tagline,
+    keyPoint: checkingEvent.keyPoint,
+    venueName: checkingEvent.venueName,
+    tickets: tickets,
+    image: checkingEvent.image,
+    category: checkingEvent.category,
+    talent: checkingEvent.talent,
+    organizer: checkingEvent.organizer,
+  };
+
+  const result = new OrdersModel({
+    date: new Date(),
+    personalDetail: personalDetail,
+    totalPay,
+    totalOrderTicket,
+    orderItems: tickets,
+    participant: req.participant.id,
+    event,
+    historyEvent,
+    payment,
+  });
+  await result.save();
+  return result;
+};
+
 module.exports = {
   signupParticipants,
   activateParticipants,
@@ -137,4 +202,5 @@ module.exports = {
   getAllEvents,
   getOneEvent,
   getAllOrders,
+  checkoutOrder,
 };
