@@ -2,6 +2,6 @@ const { signinCMS } = require("./authController");
 
 const router = require("express").Router();
 
-router.post("/signin", signinCMS);
+router.post("/auth/signin", signinCMS);
 
 module.exports = router;
