@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
 
 // Inisialisasi Variabel
 const app = express();
@@ -28,7 +29,7 @@ const participantsRouter = require("./app/api/v1/participants/participantsRouter
 const notFoundMiddlewares = require("./app/middlewares/notFoundMiddlewares");
 const handleErrorMiddlewares = require("./app/middlewares/handlerErrorMiddlewares");
 // End Middleware
-
+app.use(cors());
 // Use package
 app.use(logger("dev"));
 app.use(express.json());
