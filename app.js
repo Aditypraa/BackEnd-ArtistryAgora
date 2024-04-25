@@ -22,6 +22,7 @@ const paymentsRouter = require("./app/api/v1/payments/paymentsRouter");
 const organizersRouter = require("./app/api/v1/organizers/organizersRouter");
 const authRouter = require("./app/api/v1/auth/authRouter");
 const participantsRouter = require("./app/api/v1/participants/participantsRouter");
+const userRefreshTokenRouter = require("./app/api/v1/userRefreshToken/userRefreshTokenRouter");
 // End CMS
 // End Inisialisasi Router
 
@@ -54,6 +55,7 @@ app.use(`${v1}/cms`, orderRouter);
 app.use(`${v1}/cms`, organizersRouter);
 app.use(`${v1}/cms`, authRouter);
 app.use(`${v1}/cms`, paymentsRouter);
+app.use(`${v1}/cms`, userRefreshTokenRouter);
 // end CMS
 
 app.use(`${v1}`, participantsRouter);
