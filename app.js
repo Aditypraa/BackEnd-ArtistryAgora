@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const logger = require("morgan");
+const morgan = require("morgan");
 const cors = require("cors");
 
 // Inisialisasi Variabel
@@ -32,7 +32,7 @@ const handleErrorMiddlewares = require("./app/middlewares/handlerErrorMiddleware
 // End Middleware
 app.use(cors());
 // Use package
-app.use(logger("dev"));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
