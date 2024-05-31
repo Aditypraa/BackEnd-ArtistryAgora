@@ -5,7 +5,7 @@ const {
   createTokenUser,
 } = require("../../utils");
 const Users = require("../../api/v1/users/usersModel");
-const { NotFoundError, BadRequestError } = require("../../errors");
+const { NotFoundError } = require("../../errors");
 
 const createUserRefreshToken = async (payload) => {
   const result = await UserRefreshTokenModel.create(payload);
