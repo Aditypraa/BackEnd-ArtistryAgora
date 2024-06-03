@@ -1,16 +1,27 @@
 const { StatusCodes } = require('http-status-codes');
-const { createOrganizer, createUsers, getAllUsers } = require('../../../services/mongoose/usersMongoose');
+const {
+  createOrganizer,
+  createUsers,
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+  getAllOrganizers,
+  getOrganizerById,
+  updateOrganizer,
+  deleteOrganizer,
+} = require('../../../services/mongoose/usersMongoose');
 
-const getCMSUsers = async (req, res, next) => {
+// Organizers
+const getCMSOrganizers = async (req, res, next) => {
   try {
-    const result = await getAllUsers(req);
+    const result = await getAllOrganizers();
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
     next(err);
   }
 };
 
-// Create Organizer
 const createCMSOrganizer = async (req, res, next) => {
   try {
     const result = await createOrganizer(req);
@@ -20,7 +31,43 @@ const createCMSOrganizer = async (req, res, next) => {
   }
 };
 
-// Create Admin
+const getCMSOrganizerById = async (req, res, next) => {
+  try {
+    const result = await getOrganizerById(req);
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateCMSOrganizer = async (req, res, next) => {
+  try {
+    const result = await updateOrganizer(req);
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deleteCMSOrganizer = async (req, res, next) => {
+  try {
+    const result = await deleteOrganizer(req);
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Create Users Admin
+const getCMSUsers = async (req, res, next) => {
+  try {
+    const result = await getAllUsers(req);
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const createCMSUsers = async (req, res, next) => {
   try {
     const result = await createUsers(req);
@@ -30,4 +77,42 @@ const createCMSUsers = async (req, res, next) => {
   }
 };
 
-module.exports = { createCMSOrganizer, createCMSUsers, getCMSUsers };
+const getCMSUserById = async (req, res, next) => {
+  try {
+    const result = await getUserById(req);
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateCMSUser = async (req, res, next) => {
+  try {
+    const result = await updateUser(req);
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deleteCMSUser = async (req, res, next) => {
+  try {
+    const result = await deleteUser(req);
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  createCMSOrganizer,
+  createCMSUsers,
+  getCMSUsers,
+  getCMSUserById,
+  updateCMSUser,
+  deleteCMSUser,
+  getCMSOrganizers,
+  getCMSOrganizerById,
+  updateCMSOrganizer,
+  deleteCMSOrganizer,
+};
