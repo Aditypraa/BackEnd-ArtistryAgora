@@ -1,9 +1,9 @@
 const UsersModel = require('../../api/v1/users/usersModel');
 const OrganizersModel = require('../../api/v1/organizers/organizersModel');
-
 // Handeling Error
 const { BadRequestError } = require('../../errors');
 
+// Create Organizer
 const createOrganizer = async (req) => {
   const { organizer, role, email, password, confirmPassword, name } = req.body;
 
@@ -25,8 +25,9 @@ const createOrganizer = async (req) => {
 
   return users;
 };
+//End Create Organizer
 
-// Create Users Ini adalah admin
+// users
 const createUsers = async (req) => {
   const { name, password, role, confirmPassword, email } = req.body;
 
@@ -50,5 +51,6 @@ const getAllUsers = async (req) => {
 
   return result;
 };
+// End Users
 
 module.exports = { createOrganizer, createUsers, getAllUsers };

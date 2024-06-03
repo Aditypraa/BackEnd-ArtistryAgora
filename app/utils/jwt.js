@@ -8,6 +8,9 @@ const createJWT = ({ payload }) => {
 
   return token;
 };
+
+const isTokenValid = ({ token }) => jwt.verify(token, jwtSecret);
+
 const createRefreshJWT = ({ payload }) => {
   const token = jwt.sign(payload, jwtRefreshTokenSecret, {
     expiresIn: jwtRefreshTokenExpiration,
@@ -15,8 +18,6 @@ const createRefreshJWT = ({ payload }) => {
 
   return token;
 };
-
-const isTokenValid = ({ token }) => jwt.verify(token, jwtSecret);
 
 const isTokenValidRefreshToken = ({ token }) => jwt.verify(token, jwtRefreshTokenSecret);
 

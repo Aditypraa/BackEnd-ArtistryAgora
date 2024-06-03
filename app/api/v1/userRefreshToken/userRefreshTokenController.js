@@ -9,6 +9,7 @@ const index = async (req, res, next) => {
       data: { token: result },
     });
   } catch (err) {
+    console.log('err :', err);
     next(err);
   }
 };

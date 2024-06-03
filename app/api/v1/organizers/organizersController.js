@@ -10,6 +10,7 @@ const getCMSUsers = async (req, res, next) => {
   }
 };
 
+// Create Organizer
 const createCMSOrganizer = async (req, res, next) => {
   try {
     const result = await createOrganizer(req);
@@ -19,7 +20,7 @@ const createCMSOrganizer = async (req, res, next) => {
   }
 };
 
-// Create Users Ini adalah admin
+// Create Admin
 const createCMSUsers = async (req, res, next) => {
   try {
     const result = await createUsers(req);

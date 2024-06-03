@@ -13,9 +13,7 @@ const authenticatedUser = async (req, res, next) => {
       token = authHeader.split(' ')[1];
     }
 
-    if (!token) {
-      throw new UnauthenticatedError('Authentication invalid');
-    }
+    if (!token) throw new UnauthenticatedError('Authentication invalid');
 
     const payload = isTokenValid({ token });
 

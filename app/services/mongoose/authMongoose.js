@@ -18,6 +18,7 @@ const signin = async (req) => {
 
   // compare password from input user with in database
   const isPasswordCorrect = await result.comparePassword(password);
+
   if (!isPasswordCorrect) throw new UnauthorizedError('Invalid Credentials');
 
   // create token
