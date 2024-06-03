@@ -12,7 +12,7 @@ const getAllOrganizers = async () => {
 
 const getOrganizerById = async (req) => {
   const { id } = req.params;
-  const organizer = await UsersModel.findById(id).select('name email password role organizer');
+  const organizer = await UsersModel.findById(id);
 
   if (!organizer) {
     throw new NotFoundError('Organizer tidak ditemukan');
@@ -45,9 +45,13 @@ const createOrganizer = async (req) => {
 
 const updateOrganizer = async (req) => {
   const { id } = req.params;
-  const { name, email, role } = req.body;
+  const { organizer, role, email, password, confirmPassword, name } = req.body;
 
-  const updatedOrganizer = await UsersModel.findByIdAndUpdate(id, { name, email, role }, { new: true, runValidators: true });
+  const updatedOrganizer = await UsersModel.findByIdAndUpdate(
+    id,
+    { name, email, password, confirmPassword, role, organizer },
+    { new: true, runValidators: true },
+  );
 
   if (!updatedOrganizer) {
     throw new NotFoundError('Organizer tidak ditemukan');
@@ -111,9 +115,9 @@ const getUserById = async (req) => {
 
 const updateUser = async (req) => {
   const { id } = req.params;
-  const { name, email, role } = req.body;
+  const { name, password, role, confirmPassword, email } = req.body;
 
-  const user = await UsersModel.findByIdAndUpdate(id, { name, email, role }, { new: true, runValidators: true });
+  const user = await UsersModel.findByIdAndUpdate(id, { name, email, password, confirmPassword, role }, { new: true, runValidators: true });
 
   if (!user) {
     throw new NotFoundError('User tidak ditemukan');
