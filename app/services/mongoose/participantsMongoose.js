@@ -1,21 +1,13 @@
 // Model
-const ParticipantModel = require("../../api/v1/participants/participantsModel");
-const EventsModel = require("../../api/v1/events/eventsModel");
-const OrdersModel = require("../../api/v1/orders/ordersModel");
-const PaymentsModel = require("../../api/v1/payments/paymentsModel");
+const ParticipantModel = require('../../api/v1/participants/participantsModel');
+const EventsModel = require('../../api/v1/events/eventsModel');
+const OrdersModel = require('../../api/v1/orders/ordersModel');
+const PaymentsModel = require('../../api/v1/payments/paymentsModel');
 // End Model
 
-const {
-  BadRequestError,
-  NotFoundError,
-  UnauthorizedError,
-} = require("../../errors"); // Handle Error
-const {
-  createJWT,
-  createTokenUser,
-  createTokenParticipant,
-} = require("../../utils");
-const { otpMail } = require("../mail");
+const { BadRequestError, NotFoundError, UnauthorizedError } = require('../../errors'); // Handle Error
+const { createJWT, createTokenParticipant } = require('../../utils');
+const { otpMail } = require('../mail');
 
 const signupParticipants = async (req) => {
   const { firstName, lastName, email, password, role } = req.body;
@@ -23,7 +15,7 @@ const signupParticipants = async (req) => {
   //   JIka email dan statusnya Tidak aktif
   let result = await ParticipantModel.findOne({
     email,
-    status: "tidak aktif",
+    status: 'tidak aktif',
   });
 
   if (result) {
@@ -33,6 +25,7 @@ const signupParticipants = async (req) => {
     result.email = email;
     result.password = password;
     result.otp = Math.floor(Math.random() * 9999);
+
     await result.save();
   } else {
     result = await ParticipantModel.create({
@@ -44,6 +37,8 @@ const signupParticipants = async (req) => {
       otp: Math.floor(Math.random() * 9999),
     });
   }
+
+  // send code OTP to email participant
   await otpMail(email, result);
 
   delete result._doc.password;
@@ -54,28 +49,16 @@ const signupParticipants = async (req) => {
 
 const activateParticipants = async (req) => {
   const { email, otp } = req.body;
+  const check = await ParticipantModel.findOne({ email });
 
-  const check = await ParticipantModel.findOne({
-    email,
-  });
+  if (!check) throw new NotFoundError('Email Belum Terdaftar');
 
-  if (!check) {
-    throw new NotFoundError("Partisipan Belum Terdaftar");
-  }
+  if (check && check.otp !== otp) throw new UnauthorizedError('Kode OTP Salah');
 
-  if (check && check.otp !== otp) {
-    throw new UnauthorizedError("Kode OTP Salah");
-  }
-
-  const result = await ParticipantModel.findByIdAndUpdate(
-    check._id,
-    {
-      status: "aktif",
-    },
-    { new: true }
-  );
+  const result = await ParticipantModel.findByIdAndUpdate({ id: check._id }, { status: 'aktif' }, { new: true });
 
   delete result._doc.password;
+  // delete result._doc.otp;
 
   return result;
 };
@@ -83,20 +66,17 @@ const activateParticipants = async (req) => {
 const signinParticipants = async (req) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    throw new BadRequestError("Email dan Password harus diisi");
-  }
+  if (!email || !password) throw new BadRequestError('Email dan Password harus diisi');
 
-  const result = await ParticipantModel.findOne({ email: email });
+  const result = await ParticipantModel.findOne({ email });
 
-  if (!result) throw new UnauthorizedError("Invalid Credential");
+  if (!result) throw new UnauthorizedError('Invalid Credential');
 
-  if (result.status === "tidak aktif")
-    throw new UnauthorizedError("Akun anda Belum Aktif");
+  if (result.status === 'tidak aktif') throw new UnauthorizedError('Akun anda Belum Aktif');
 
   const isPasswordCorrect = await result.comparePassword(password);
 
-  if (!isPasswordCorrect) throw new UnauthorizedError("Invalid Credential");
+  if (!isPasswordCorrect) throw new UnauthorizedError('Invalid Credential');
 
   const token = createJWT({ payload: createTokenParticipant(result) });
 
@@ -104,10 +84,7 @@ const signinParticipants = async (req) => {
 };
 
 const getAllEvents = async (req) => {
-  const result = await EventsModel.find({ statusEvent: "Published" })
-    .populate("category")
-    .populate("image")
-    .select("_id title date tickets venueName");
+  const result = await EventsModel.find({ statusEvent: 'Published' }).populate('category').populate('image').select('_id title date tickets venueName');
 
   return result;
 };
@@ -115,10 +92,7 @@ const getAllEvents = async (req) => {
 const getOneEvent = async (req) => {
   const { id } = req.params;
 
-  const result = await EventsModel.findOne({ _id: id })
-    .populate("category")
-    .populate("talent")
-    .populate("image");
+  const result = await EventsModel.findOne({ _id: id }).populate('category').populate({ path: 'talent', populate: 'image' }).populate('image');
 
   if (!result) throw new NotFoundError(`Tidak Ada Acara dengan Id ${id}`);
 
@@ -135,25 +109,21 @@ const checkoutOrder = async (req) => {
   const { event, personalDetail, payment, tickets } = req.body;
 
   const checkingEvent = await EventsModel.findOne({ _id: event });
-  if (!checkingEvent) {
-    throw new NotFoundError("Tidak ada acara dengan id : " + event);
-  }
+
+  if (!checkingEvent) throw new NotFoundError('Tidak ada acara dengan id : ' + event);
 
   const checkingPayment = await PaymentsModel.findOne({ _id: payment });
 
-  if (!checkingPayment) {
-    throw new NotFoundError(
-      "Tidak ada metode pembayaran dengan id :" + payment
-    );
-  }
+  if (!checkingPayment) throw new NotFoundError('Tidak ada metode pembayaran dengan id :' + payment);
 
   let totalPay = 0,
     totalOrderTicket = 0;
+
   await tickets.forEach((tic) => {
     checkingEvent.tickets.forEach((ticket) => {
       if (tic.ticketCategories.type === ticket.type) {
         if (tic.sumTicket > ticket.stock) {
-          throw new NotFoundError("Stock event tidak mencukupi");
+          throw new NotFoundError('Stock event tidak mencukupi');
         } else {
           ticket.stock = ticket.stock -= tic.sumTicket;
 
@@ -195,6 +165,13 @@ const checkoutOrder = async (req) => {
   return result;
 };
 
+const getAllPaymentsByOrganizer = async (req) => {
+  const { organizer } = req.params;
+  const result = await PaymentsModel.find({ organizer: organizer });
+
+  return result;
+};
+
 module.exports = {
   signupParticipants,
   activateParticipants,
@@ -203,4 +180,5 @@ module.exports = {
   getOneEvent,
   getAllOrders,
   checkoutOrder,
+  getAllPaymentsByOrganizer,
 };

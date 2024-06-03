@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const { model, Schema } = mongoose;
 
 const ticketCategoriesSchema = new Schema({
   type: {
     type: String,
-    required: [true, "Tipe Tiket harus diisi"],
+    required: [true, 'Tipe Tiket harus diisi'],
   },
   price: {
     type: Number,
@@ -28,32 +28,32 @@ const eventSchema = new Schema(
   {
     title: {
       type: String,
-      required: [true, "Judul Event harus diisi"],
+      required: [true, 'Judul Event harus diisi'],
       minlength: 3,
       maxlength: 50,
     },
     date: {
       type: Date,
-      required: [true, "Tanggal Event harus diisi"],
+      required: [true, 'Tanggal Event harus diisi'],
     },
     about: {
       type: String,
     },
     tagline: {
       type: String,
-      required: [true, "Tagline Event harus diisi"],
+      required: [true, 'Tagline Event harus diisi'],
     },
     keyPoint: {
       type: [String],
     },
     venueName: {
       type: String,
-      required: [true, "Tempat Acara harus diisi"],
+      required: [true, 'Tempat Acara harus diisi'],
     },
     statusEvent: {
       type: String,
-      enum: ["Draft", "Published"],
-      default: "Draft",
+      enum: ['Draft', 'Published'],
+      default: 'Draft',
     },
     tickets: {
       type: [ticketCategoriesSchema],
@@ -61,26 +61,26 @@ const eventSchema = new Schema(
     },
     image: {
       type: mongoose.Types.ObjectId,
-      ref: "Image",
+      ref: 'Image',
       required: true,
     },
     category: {
       type: mongoose.Types.ObjectId,
-      ref: "Category",
+      ref: 'Category',
       required: true,
     },
     talent: {
       type: mongoose.Types.ObjectId,
-      ref: "Talent",
+      ref: 'Talent',
       required: true,
     },
     organizer: {
       type: mongoose.Types.ObjectId,
-      ref: "Organizer",
+      ref: 'Organizer',
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = model("Event", eventSchema);
+module.exports = model('Event', eventSchema);

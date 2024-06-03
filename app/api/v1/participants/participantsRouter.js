@@ -1,4 +1,4 @@
-const router = require("express").Router();
+const router = require('express').Router();
 const {
   signup,
   activateParticipant,
@@ -7,18 +7,17 @@ const {
   getDetailLandingPage,
   getDashboard,
   checkout,
-} = require("./participantsController");
+  getAllPayments,
+} = require('./participantsController');
+const { authenticatedParticipant } = require('../../../middlewares/authMiddlewares');
 
-const {
-  authenticatedParticipant,
-} = require("../../../middlewares/authMiddlewares");
-
-router.post("/auth/signup", signup);
-router.put("/active", activateParticipant);
-router.post("/auth/signin", signin);
-router.get("/events", getAllLandingPage);
-router.get("/events/:id", getDetailLandingPage);
-router.get("/orders", authenticatedParticipant, getDashboard);
-router.post("/checkout", authenticatedParticipant, checkout);
+router.post('/auth/signup', signup);
+router.put('/active', activateParticipant);
+router.post('/auth/signin', signin);
+router.get('/events', getAllLandingPage);
+router.get('/events/:id', getDetailLandingPage);
+router.get('/payments/:organizer', authenticatedParticipant, getAllPayments);
+router.get('/orders', authenticatedParticipant, getDashboard);
+router.post('/checkout', authenticatedParticipant, checkout);
 
 module.exports = router;

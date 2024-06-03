@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const userRefreshTokenSchema = new mongoose.Schema(
   {
@@ -7,11 +7,11 @@ const userRefreshTokenSchema = new mongoose.Schema(
     },
     user: {
       type: mongoose.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = mongoose.model("UserRefreshToken", userRefreshTokenSchema);
+module.exports = mongoose.model('UserRefreshToken', userRefreshTokenSchema);

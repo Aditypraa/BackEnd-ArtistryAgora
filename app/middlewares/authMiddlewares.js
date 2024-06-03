@@ -1,5 +1,5 @@
-const { UnauthenticatedError, UnauthorizedError } = require("../errors");
-const { isTokenValid } = require("../utils/jwt");
+const { UnauthenticatedError, UnauthorizedError } = require('../errors');
+const { isTokenValid } = require('../utils/jwt');
 
 // User Ini adalah CMS yang terdiri dari OWNER, ORGANIZER DAN ADMIN
 const authenticatedUser = async (req, res, next) => {
@@ -9,23 +9,23 @@ const authenticatedUser = async (req, res, next) => {
     // check Header
     const authHeader = req.headers.authorization;
 
-    if (authHeader && authHeader.startsWith("Bearer")) {
-      token = authHeader.split(" ")[1];
+    if (authHeader && authHeader.startsWith('Bearer')) {
+      token = authHeader.split(' ')[1];
     }
 
     if (!token) {
-      throw new UnauthenticatedError("Authentication invalid");
+      throw new UnauthenticatedError('Authentication invalid');
     }
 
     const payload = isTokenValid({ token });
 
     // Melampirkan pengguna dan izinnya ke objek permintaan
     req.user = {
+      id: payload.userId,
+      name: payload.name,
       email: payload.email,
       role: payload.role,
-      name: payload.name,
       organizer: payload.organizer,
-      id: payload.userId,
     };
 
     next();
@@ -41,22 +41,22 @@ const authenticatedParticipant = async (req, res, next) => {
     // check Header
     const authHeader = req.headers.authorization;
 
-    if (authHeader && authHeader.startsWith("Bearer")) {
-      token = authHeader.split(" ")[1];
+    if (authHeader && authHeader.startsWith('Bearer')) {
+      token = authHeader.split(' ')[1];
     }
 
     if (!token) {
-      throw new UnauthenticatedError("Authentication invalid");
+      throw new UnauthenticatedError('Authentication invalid');
     }
 
     const payload = isTokenValid({ token });
 
     // Melampirkan pengguna dan izinnya ke objek permintaan
     req.participant = {
+      id: payload.participantId,
       email: payload.email,
       firstName: payload.firstName,
       lastName: payload.lastName,
-      id: payload.participantId,
     };
 
     next();
@@ -67,15 +67,10 @@ const authenticatedParticipant = async (req, res, next) => {
 
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      throw new UnauthorizedError(`Unauthorized to access this route`);
-    }
+    if (!roles.includes(req.user.role)) throw new UnauthorizedError(`Unauthorized to access this route`);
+
     next();
   };
 };
 
-module.exports = {
-  authenticatedUser,
-  authenticatedParticipant,
-  authorizeRoles,
-};
+module.exports = { authenticatedUser, authenticatedParticipant, authorizeRoles };

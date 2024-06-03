@@ -1,7 +1,5 @@
-const { StatusCodes } = require("http-status-codes");
-const {
-  getUserRefreshToken,
-} = require("../../../services/mongoose/userRefreshTokenMongoose");
+const { StatusCodes } = require('http-status-codes');
+const { getUserRefreshToken } = require('../../../services/mongoose/userRefreshTokenMongoose');
 
 const index = async (req, res, next) => {
   try {
@@ -11,8 +9,6 @@ const index = async (req, res, next) => {
       data: { token: result },
     });
   } catch (err) {
-    // console.log("err");
-    // console.log(err);
     next(err);
   }
 };

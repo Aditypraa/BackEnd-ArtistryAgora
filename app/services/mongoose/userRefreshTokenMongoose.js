@@ -1,11 +1,7 @@
-const UserRefreshTokenModel = require("../../api/v1/userRefreshToken/userRefreshTokenModel");
-const {
-  isTokenValidRefreshToken,
-  createJWT,
-  createTokenUser,
-} = require("../../utils");
-const Users = require("../../api/v1/users/usersModel");
-const { NotFoundError } = require("../../errors");
+const UserRefreshTokenModel = require('../../api/v1/userRefreshToken/userRefreshTokenModel');
+const { isTokenValidRefreshToken, createJWT, createTokenUser } = require('../../utils');
+const Users = require('../../api/v1/users/usersModel');
+const { NotFoundError } = require('../../errors');
 
 const createUserRefreshToken = async (payload) => {
   const result = await UserRefreshTokenModel.create(payload);

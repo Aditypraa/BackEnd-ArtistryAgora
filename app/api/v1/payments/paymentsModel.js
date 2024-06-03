@@ -1,16 +1,16 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const PaymentSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      required: [true, "Tipe Pembayaran Harus Diisi"],
+      required: [true, 'Tipe Pembayaran Harus Diisi'],
       minlength: 3,
       maxlength: 50,
     },
     image: {
       type: mongoose.Types.ObjectId,
-      ref: "Image",
+      ref: 'Image',
       required: true,
     },
     status: {
@@ -20,11 +20,11 @@ const PaymentSchema = new mongoose.Schema(
     },
     organizer: {
       type: mongoose.Types.ObjectId,
-      ref: "Organizer",
+      ref: 'Organizer',
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = mongoose.model("Payment", PaymentSchema);
+module.exports = mongoose.model('Payment', PaymentSchema);

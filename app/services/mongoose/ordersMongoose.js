@@ -1,12 +1,12 @@
-const OrdersModel = require("../../api/v1/orders/ordersModel");
+const OrdersModel = require('../../api/v1/orders/ordersModel');
 
 const getAllOrders = async (req) => {
   const { limit = 10, page = 1, startDate, endDate } = req.query;
   let condition = {};
 
   // let match = {};
-  if (req.user.role !== "owner") {
-    condition = { ...condition, "historyEvent.organizer": req.user.organizer };
+  if (req.user.role !== 'owner') {
+    condition = { ...condition, 'historyEvent.organizer': req.user.organizer };
   }
 
   if (startDate && endDate) {
