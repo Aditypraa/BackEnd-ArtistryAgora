@@ -12,7 +12,7 @@ const getAllOrganizers = async () => {
 
 const getOrganizerById = async (req) => {
   const { id } = req.params;
-  const organizer = await UsersModel.findById(id);
+  const organizer = await UsersModel.findById(id).populate({ path: 'organizer', select: 'organizer' });
 
   if (!organizer) {
     throw new NotFoundError('Organizer tidak ditemukan');
@@ -34,6 +34,7 @@ const createOrganizer = async (req) => {
     email,
     name,
     password,
+    confirmPassword,
     organizer: result._id,
     role,
   });
@@ -47,30 +48,66 @@ const updateOrganizer = async (req) => {
   const { id } = req.params;
   const { organizer, role, email, password, confirmPassword, name } = req.body;
 
-  const updatedOrganizer = await UsersModel.findByIdAndUpdate(
-    id,
-    { name, email, password, confirmPassword, role, organizer },
-    { new: true, runValidators: true },
-  );
+  if (password !== confirmPassword) {
+    throw new BadRequestError('Passwords do not match');
+  }
 
-  if (!updatedOrganizer) {
+  // Find user by ID to get the organizer ID
+  const user = await UsersModel.findById(id);
+  if (!user) {
+    throw new NotFoundError('User tidak ditemukan');
+  }
+
+  // Update the organizer
+  const organizerResult = await OrganizersModel.findByIdAndUpdate(user.organizer, { organizer }, { new: true, runValidators: true });
+
+  if (!organizerResult) {
     throw new NotFoundError('Organizer tidak ditemukan');
   }
 
-  return updatedOrganizer;
+  // Update the user
+  const userResult = await UsersModel.findByIdAndUpdate(
+    id,
+    {
+      role,
+      email,
+      password,
+      confirmPassword,
+      name,
+      organizer: organizerResult._id,
+    },
+    { new: true, runValidators: true },
+  );
+
+  if (!userResult) {
+    throw new NotFoundError('User tidak ditemukan');
+  }
+
+  return userResult;
 };
 
 const deleteOrganizer = async (req) => {
   const { id } = req.params;
 
-  const organizer = await OrganizersModel.findByIdAndDelete(id);
+  // Cari pengguna berdasarkan id
+  const user = await UsersModel.findById(id);
+
+  if (!user) {
+    throw new NotFoundError('User tidak ditemukan');
+  }
+
+  // Dapatkan id dari penyelenggara
+  const organizerId = user.organizer;
+
+  // Hapus penyelenggara berdasarkan id dari penyelenggara
+  const organizer = await OrganizersModel.findByIdAndDelete(organizerId);
 
   if (!organizer) {
     throw new NotFoundError('Organizer tidak ditemukan');
   }
 
-  // Also delete all users associated with this organizer
-  await UsersModel.deleteMany({ organizer: id });
+  // Hapus pengguna berdasarkan id
+  await UsersModel.findByIdAndDelete(id);
 
   return organizer;
 };
@@ -79,7 +116,7 @@ const deleteOrganizer = async (req) => {
 // Users/Admin
 const getAllUsers = async (req) => {
   const organizerId = req.user.organizer;
-  const result = await UsersModel.find({ organizer: organizerId, role: 'admin' });
+  const result = await UsersModel.find({ organizer: organizerId, role: 'admin' }).select('name email role');
 
   return result;
 };
