@@ -49,13 +49,13 @@ const signupParticipants = async (req) => {
 
 const activateParticipants = async (req) => {
   const { email, otp } = req.body;
-  const check = await ParticipantModel.findOne({ email });
+  const check = await ParticipantModel.findOne({ email: email.toLowerCase() });
 
   if (!check) throw new NotFoundError('Email Belum Terdaftar');
 
   if (check && check.otp !== otp) throw new UnauthorizedError('Kode OTP Salah');
 
-  const result = await ParticipantModel.findByIdAndUpdate({ id: check._id }, { status: 'aktif' }, { new: true });
+  const result = await ParticipantModel.findByIdAndUpdate({ _id: check._id }, { status: 'aktif' }, { new: true });
 
   delete result._doc.password;
   // delete result._doc.otp;
@@ -66,17 +66,17 @@ const activateParticipants = async (req) => {
 const signinParticipants = async (req) => {
   const { email, password } = req.body;
 
-  if (!email || !password) throw new BadRequestError('Email dan Password harus diisi');
+  if (!email || !password) throw new BadRequestError('Masukan Email dan Password');
 
   const result = await ParticipantModel.findOne({ email });
 
-  if (!result) throw new UnauthorizedError('Invalid Credential');
+  if (!result) throw new UnauthorizedError('Email dan Password Tidak Valid!');
 
-  if (result.status === 'tidak aktif') throw new UnauthorizedError('Akun anda Belum Aktif');
+  if (result.status === 'tidak aktif') throw new UnauthorizedError('Akun anda Belum Terdaftar');
 
   const isPasswordCorrect = await result.comparePassword(password);
 
-  if (!isPasswordCorrect) throw new UnauthorizedError('Invalid Credential');
+  if (!isPasswordCorrect) throw new UnauthorizedError('Email dan Password Tidak Valid!');
 
   const token = createJWT({ payload: createTokenParticipant(result) });
 
@@ -162,7 +162,72 @@ const checkoutOrder = async (req) => {
     payment,
   });
   await result.save();
-  return result;
+
+  // call Create Invoice Xendit
+  // create payload
+  let payload = {
+    external_id: result._id.toString(),
+    amount: totalPay,
+    description: 'Invoice Demo #123',
+    invoice_duration: 86400,
+    customer: {
+      given_names: personalDetail.firstName,
+      surname: personalDetail.lastName,
+      email: personalDetail.email,
+      addresses: [
+        {
+          country: 'Indonesia',
+        },
+      ],
+    },
+    customer_notification_preference: {
+      invoice_created: ['email'],
+      invoice_reminder: ['email'],
+      invoice_paid: ['email'],
+    },
+    // can be adjusted to the FE pages on desired
+    success_redirect_url: 'https://www.google.com',
+    failure_redirect_url: 'https://www.google.com',
+    currency: 'IDR',
+    items: [],
+    metadata: {
+      store_branch: 'Surabaya',
+    },
+  };
+
+  for (const ticket of tickets) {
+    payload.items.push({
+      name: ticket.ticketCategories.type,
+      quantity: ticket.sumTicket,
+      price: ticket.ticketCategories.price,
+      category: 'Ticket',
+    });
+  }
+  // send to xendit
+  // create api call to external api
+  const base64Credentials = btoa(`${process.env.XENDIT_SECRET_KEY}:${''}`);
+  // console.log('process.env.XENDIT_BASE_URL >>', process.env.XENDIT_BASE_URL);
+  // console.log('process.env.XENDIT_SECRET_KEY >>', process.env.XENDIT_SECRET_KEY);
+  let invoice;
+  try {
+    invoice = await fetch(`${process.env.XENDIT_BASE_URL}/v2/invoices`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${base64Credentials}`,
+      },
+    });
+  } catch (error) {
+    console.log('error on create invoice >>', error);
+  }
+  // console.log('here 222 >>');
+  const resultInvoice = await invoice.json();
+
+  // console.log('here 333 >>');
+  // console.log(resultInvoice);
+
+  return { result, invoice: resultInvoice };
 };
 
 const getAllPaymentsByOrganizer = async (req) => {

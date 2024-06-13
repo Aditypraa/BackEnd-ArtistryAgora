@@ -18,6 +18,11 @@ const getAllPayments = async (req) => {
 const createPayments = async (req) => {
   const { type, image } = req.body;
 
+  // validasi input data
+  if (!type || !image) {
+    throw new BadRequestError('Tipe dan gambar harus diisi');
+  }
+
   await checkingImage(image);
 
   const check = await PaymentsModel.findOne({
@@ -61,6 +66,11 @@ const getOnePayments = async (req) => {
 const updatePayments = async (req) => {
   const { id } = req.params;
   const { type, image } = req.body;
+
+  // validasi input data
+  if (!type || !image) {
+    throw new BadRequestError('Tipe dan gambar harus diisi');
+  }
 
   await checkingImage(image);
 

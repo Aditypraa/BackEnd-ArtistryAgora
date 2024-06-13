@@ -50,13 +50,18 @@ const getAllEvents = async (req) => {
 const createEvents = async (req) => {
   const { title, date, about, tagline, venueName, keyPoint, statusEvent, tickets, image, category, talent } = req.body;
 
+  // Validasi input data
+  if (!title || !date || !about || !tagline || !venueName || !keyPoint || !tickets || !image || !category || !talent) {
+    throw new BadRequestError('Semua field harus diisi');
+  }
+
   //   Cari image, category, talent dengan field ID
   await checkingImage(image);
   await checkingCategories(category);
   await checkingTalent(talent);
 
   // Cari event Dengan Field Name
-  const check = await EventsModel.findOne({ title });
+  const check = await EventsModel.findOne({ title, organizer: req.user.organizer });
 
   // Apabila check true / data event sudah ada maka kita tampilkan error bad request dengan message event nama duplikat
   if (check) throw new BadRequestError('Judul Event Sudah Terdaftar');
@@ -109,6 +114,11 @@ const updateEvents = async (req) => {
   const { id } = req.params;
   const { title, date, about, tagline, venueName, keyPoint, statusEvent, tickets, image, category, talent } = req.body;
 
+  // Validasi input data
+  if (!title || !date || !about || !tagline || !venueName || !keyPoint || !statusEvent || !tickets || !image || !category || !talent) {
+    throw new BadRequestError('Semua field harus diisi');
+  }
+
   // Cari image, category, talent dengan field ID
   await checkingImage(image);
   await checkingCategories(category);
@@ -117,7 +127,7 @@ const updateEvents = async (req) => {
   // cari event berdasarkan field Id
   const checkEvent = await EventsModel.findOne({ _id: id });
 
-  // JIka false / null maka akan menampilkan error " Tidak Ada Acara dengan ID : ${id} "
+  // Jika false / null maka akan menampilkan error " Tidak Ada Acara dengan ID : ${id} "
   if (!checkEvent) throw new NotFoundError(`Tidak ada Event dengan id :  ${id}`);
 
   // Cari event Dengan Field Name dan Id selain dari yang dikirim dari params

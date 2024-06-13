@@ -33,4 +33,12 @@ const getAllOrders = async (req) => {
   return { data: result, pages: Math.ceil(count / limit), total: count };
 };
 
-module.exports = { getAllOrders };
+const processUpdateOrder = async (req) => {
+  const { external_id, status } = req.body;
+
+  const order = await OrdersModel.findByIdAndUpdate({ _id: external_id }, { status: status.toLowerCase() }, { new: true });
+
+  return order;
+};
+
+module.exports = { getAllOrders, processUpdateOrder };

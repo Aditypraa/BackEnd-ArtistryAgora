@@ -49,7 +49,7 @@ const updateOrganizer = async (req) => {
   const { organizer, role, email, password, confirmPassword, name } = req.body;
 
   if (password !== confirmPassword) {
-    throw new BadRequestError('Passwords do not match');
+    throw new BadRequestError('Passwords dan confirmPassword tidak sama');
   }
 
   // Find user by ID to get the organizer ID

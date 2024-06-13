@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { getAllOrders } = require('../../../services/mongoose/ordersMongoose');
+const { getAllOrders, processUpdateOrder } = require('../../../services/mongoose/ordersMongoose');
 
 const index = async (req, res, next) => {
   try {
@@ -10,4 +10,13 @@ const index = async (req, res, next) => {
   }
 };
 
-module.exports = { index };
+const processInvoiceWebhook = async (req, res, next) => {
+  try {
+    const result = await processUpdateOrder(req);
+    res.status(StatusCodes.OK).json();
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { index, processInvoiceWebhook };

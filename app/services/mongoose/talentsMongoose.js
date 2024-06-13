@@ -24,6 +24,11 @@ const getAllTalents = async (req) => {
 const createTalent = async (req) => {
   const { name, role, image } = req.body;
 
+  // Validasi input data
+  if (!name || !role || !image) {
+    throw new BadRequestError('Nama, role dan foto harus diisi');
+  }
+
   // mencari Image dengan field image
   await checkingImage(image);
 
@@ -67,6 +72,11 @@ const getOneTalent = async (req) => {
 const updateTalents = async (req) => {
   const { id } = req.params;
   const { name, role, image } = req.body;
+
+  // Validasi input data
+  if (!name || !role || !image) {
+    throw new BadRequestError('Nama, role dan foto harus diisi');
+  }
 
   // mencari Image dengan field image
   await checkingImage(image);
