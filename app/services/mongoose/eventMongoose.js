@@ -114,11 +114,6 @@ const updateEvents = async (req) => {
   const { id } = req.params;
   const { title, date, about, tagline, venueName, keyPoint, statusEvent, tickets, image, category, talent } = req.body;
 
-  // Validasi input data
-  if (!title || !date || !about || !tagline || !venueName || !keyPoint || !statusEvent || !tickets || !image || !category || !talent) {
-    throw new BadRequestError('Semua field harus diisi');
-  }
-
   // Cari image, category, talent dengan field ID
   await checkingImage(image);
   await checkingCategories(category);
