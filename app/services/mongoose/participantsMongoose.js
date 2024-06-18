@@ -232,7 +232,7 @@ const checkoutOrder = async (req) => {
 
 const getAllPaymentsByOrganizer = async (req) => {
   const { organizer } = req.params;
-  const result = await PaymentsModel.find({ organizer: organizer });
+  const result = await PaymentsModel.find({ organizer: organizer }).populate('image');
 
   return result;
 };
