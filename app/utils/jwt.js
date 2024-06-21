@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { jwtExpiration, jwtSecret, jwtRefreshTokenSecret, jwtRefreshTokenExpiration } = require('../config/mongoConfig');
+const { jwtExpiration, jwtSecret, jwtRefreshTokenSecret, jwtRefreshTokenExpiration } = require('../config/index');
 
 const createJWT = ({ payload }) => {
   const token = jwt.sign(payload, jwtSecret, {

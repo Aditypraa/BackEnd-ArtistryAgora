@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { gmail, password } = require('../../config/mongoConfig');
+const { gmail, password } = require('../../config/index');
 const Mustache = require('mustache');
 const fs = require('fs');
 

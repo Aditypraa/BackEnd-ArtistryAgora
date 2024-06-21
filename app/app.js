@@ -11,24 +11,24 @@ const app = express();
 // Inisialisasi Router
 const v1 = '/api/v1';
 
-const categoriesRouter = require('./app/api/v1/categories/categoriesRouter');
-const eventsRouter = require('./app/api/v1/events/eventsRouter');
-const imagesRouter = require('./app/api/v1/images/imagesRouter');
-const talentsRouter = require('./app/api/v1/talents/talentsRouter');
-const orderRouter = require('./app/api/v1/orders/ordersRouter');
-const paymentsRouter = require('./app/api/v1/payments/paymentsRouter');
+const categoriesRouter = require('./api/v1/categories/categoriesRouter');
+const eventsRouter = require('./api/v1/events/eventsRouter');
+const imagesRouter = require('./api/v1/images/imagesRouter');
+const talentsRouter = require('./api/v1/talents/talentsRouter');
+const orderRouter = require('./api/v1/orders/ordersRouter');
+const paymentsRouter = require('./api/v1/payments/paymentsRouter');
 
 // CMS
-const organizersRouter = require('./app/api/v1/organizers/organizersRouter');
-const authRouter = require('./app/api/v1/auth/authRouter');
-const participantsRouter = require('./app/api/v1/participants/participantsRouter');
-const userRefreshTokenRouter = require('./app/api/v1/userRefreshToken/userRefreshTokenRouter');
+const organizersRouter = require('./api/v1/organizers/organizersRouter');
+const authRouter = require('./api/v1/auth/authRouter');
+const participantsRouter = require('./api/v1/participants/participantsRouter');
+const userRefreshTokenRouter = require('./api/v1/userRefreshToken/userRefreshTokenRouter');
 // End CMS
 // End Inisialisasi Router
 
 // Middleware
-const notFoundMiddlewares = require('./app/middlewares/notFoundMiddlewares');
-const handleErrorMiddlewares = require('./app/middlewares/handlerErrorMiddlewares');
+const notFoundMiddlewares = require('./middlewares/notFoundMiddlewares');
+const handleErrorMiddlewares = require('./middlewares/handlerErrorMiddlewares');
 // End Middleware
 app.use(cors());
 // Use package
