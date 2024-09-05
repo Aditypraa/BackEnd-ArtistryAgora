@@ -6,3 +6,5 @@ Artistry Agora => "Kumpulan Karya Seni" yang menampilkan keahlian dan karya seni
 2. Agora: Secara historis, "Agora" adalah tempat di Yunani kuno di mana orang berkumpul untuk berdiskusi, berinteraksi, dan memperdagangkan ide dan barang. Dalam konteks "Artistry Agora," Agora melambangkan tempat virtual di mana komunitas seniman, kolektor seni, penggemar seni, dan orang-orang yang tertarik pada pameran seni dapat berkumpul, berbagi ide, dan menikmati karya seni.
 
 Dengan demikian, "Artistry Agora" adalah platform yang menghubungkan keahlian seni dari berbagai seniman dengan komunitas yang ingin menjelajahi, menghargai, dan mengkoleksi karya seni. Ini merupakan tempat di mana inspirasi dan kreativitas bertemu, dan di mana kesenangan seni dapat dibagi dan dinikmati bersama-sama.
+
+Link Documentasi API : https://documenter.getpostman.com/view/24667557/2sAXjQ2AYK
